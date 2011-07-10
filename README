@@ -1,0 +1,70 @@
+This cute little script generates CMakeLists.txt files and a cross-platform 
+build system to manage your C++ projects.
+
+What it does
+============
+
+rcmake uses an adjacent project.rb specifying your repository layout then 
+recursively scans your projecth hierarchy to generate a per-scheme 
+CMakeLists.txt.
+
+Usage
+=====
+
+Simply drop this into the root of your repository and supply a project.rb
+specifying the repository layout (where your sources are, how they're divided 
+into projects etc) then run it. 
+
+The script will generate a build directory with schemes (debug,release)
+for your platform containing all your build files (makefiles, VS projects, etc),
+ie,
+  build/linux-debug
+  build/linux-release
+
+cmake options can be provided to rcmake, eg,
+
+ruby rcmake.rb -G Xcode
+
+Building Projects
+=================
+
+To build/install your projects, simply do so from the scheme directory,
+ie, for an Xcode projects
+
+cd build/apple-debug
+xcodebuild (OR open 'myproject'.xcodeproj)
+
+Cleaning Projects
+=================
+
+The build system is contained within 'build' and be cleaned by removing
+the folder or running,
+
+ruby rcmake.rb clean
+
+Extras
+======
+
+The build system will respect your repository layout, eg, source sub-folders,
+and organise source groups etc. Package management via cmake is supported
+via your project.rb.
+
+Dude, where's my project.rb!?
+=======================
+
+A skeleton project.rb illustrates the schema for a project, but a 
+complete example of using rcmake is included in the 'soup' project. 
+Soup can be found alongside rcmake on github at:
+git://github.com/danielgrigg/rcmake.git
+
+Why use rcmake anyway??
+===============
+
+CMake is an awesome tool for cross-platform development, but anyone who's 
+written a few CMake-based projects understands the tedious nature of 
+managing CMakeLists.txt throughout the project lifecycle. Most projects
+maintain a consistent layout of sub-projects, sources, tests etc which
+rcmake respects (indeed enforces) but cmake alone can't. Further, rcmake
+eliminates the burden of configuring different schemes and isolating
+cmake related files within a single build folder.
+
